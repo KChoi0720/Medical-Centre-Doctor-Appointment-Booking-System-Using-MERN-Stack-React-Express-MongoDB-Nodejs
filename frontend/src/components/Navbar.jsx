@@ -1,14 +1,15 @@
-import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React, {useState} from 'react'
+import { useNavigate, NavLink } from 'react-router-dom'
 import logo from '../assets/logo1.png';
-
-
+// import assets from '../assets/assets';
 
 
 
 const Navbar = () => {
 
-    // const useNavigate =useNavigate();
+    const navigate = useNavigate();
+    const [showMenu, setShowMenu] = useState(false);
+    const [token, setToken] = useState(true);
 
 
     return (
@@ -18,7 +19,7 @@ const Navbar = () => {
                 <NavLink to='/'>
                     <li className='py-1'>HOME </li>
                     {/* <hr /> is for adding underline below HOME */}
-                    <hr className='border-none outline-none h-0.5 bg-[#1A5F7A]  w-3/5 m-auto hidden group-hover:block group-[.active]:block' />
+                    <hr className='border-none outline-none h-0.5 bg-primary  w-3/5 m-auto hidden group-hover:block group-[.active]:block' />
                 </NavLink>
 
                 <NavLink to='/doctors'>
@@ -39,11 +40,20 @@ const Navbar = () => {
             </ul>
 
             <div className='flex items-center gap-4'>
-                <button  className='bg-[#1233dd] text-white px-8 py-3 rounded-full font-light hidden  md:block' >CREATE ACCOUNT</button>
+                {
+                    token? <div>
+                        {/* <img className='w-12 h-12 rounded-full' src={assets.profile_pic} alt="" /> */}
+                        
+                    </div>
+                    :<button onClick={() => navigate('/login')} className='bg-blue-600 hover:bg-yellow-500 text-white px-8 py-3 rounded-full font-light hidden  md:block' >CREATE ACCOUNT</button>
+                }
             </div>
- 
         </div>
     )
 }
 
 export default Navbar
+
+
+
+
