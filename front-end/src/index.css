@@ -7,3 +7,7 @@
 }
 
 
+/* hide scroll bar for Find by Speciality */
+::-webkit-scrollbar{
+    @apply hidden
+}
