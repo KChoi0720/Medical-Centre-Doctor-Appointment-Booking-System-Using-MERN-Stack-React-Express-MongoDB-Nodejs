@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
-import logo from '../assets/logo1.png';
+import logo1 from '../assets/logo1.png';
 import profile_pic from "../assets/profile_pic.png";
 import dropdown_icon from "../assets/dropdown_icon.svg";
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 const NavBar = () => {
@@ -15,7 +15,7 @@ const NavBar = () => {
 
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-      <img className='w-14 h-14  rounded-t-2xl cursor-pointer' src={logo} alt="" />
+      <img onClick={()=>navigate('/')} className='w-14 h-14 rounded-t-2xl cursor-pointer' src={logo1} alt="" />
       <ul className='hidden md:flex items-start gap-5 font-medium'>
         <NavLink to='/'>
             <li className='py-1'>HOME</li>
