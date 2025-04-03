@@ -22,7 +22,7 @@ const MyProfile = () => {
   })
 
 
-  const [isEdit, setIsEdit] = useState(true)
+  const [isEdit, setIsEdit] = useState(false)
 
   return (
     <div className='flext flex-col max-w-lg gap-2 text-sm'>
@@ -88,7 +88,6 @@ const MyProfile = () => {
           isEdit
             ? <button className='border border-blue-900 px-8 py-2 rounded-full hover:bg-blue-900 hover:text-white transition-all duration-300' onClick={() => setIsEdit(false)}>Save Information</button>
             : <button className='border border-blue-900 px-8 py-2 rounded-full  hover:bg-blue-900 hover:text-white transition-all duration-300' onClick={() => setIsEdit(true)}>Edit</button>
-    
         }
       </div>
     </div>
