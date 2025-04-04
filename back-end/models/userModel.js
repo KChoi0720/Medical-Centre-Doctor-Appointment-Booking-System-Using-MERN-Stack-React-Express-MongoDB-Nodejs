@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
     default:""  }, // use image to datebase 64 to transfer
-  address: { type: Object, required: { line1: "", line2: "" } },
+    address: {
+      line1: { type: String, default: "" },
+      line2: { type: String, default: "" }
+    },    
   gender: { type: String, default: "Not Selected" },
   dob: { type: String, default: "Not Selected" },
   phone: { type: String, default: "000000000" },
