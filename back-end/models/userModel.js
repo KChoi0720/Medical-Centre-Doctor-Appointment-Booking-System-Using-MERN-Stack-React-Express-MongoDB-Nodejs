@@ -6,9 +6,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  // image: {
-  //   type: String,
-  //   default:""  }, // use image to datebase 64 to transfer
+  image: {
+    type: String,
+    default:""  }, // use image to datebase 64 to transfer
   address: { type: Object, required: { line1: "", line2: "" } },
   gender: { type: String, default: "Not Selected" },
   dob: { type: String, default: "Not Selected" },

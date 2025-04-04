@@ -34,7 +34,17 @@ const Login = () => {
                 }
 
             } else {
-               
+                // self ----------------------
+                const { data } = await axios.post(backendUrl + '/api/doctor/login', { email, password })
+                if (data.success) {
+                    // console.log(data.token)
+                    localStorage.setItem("dToken", data.token)
+                    setAToken(data.token)
+                } else {
+                    toast.error(data.message)
+                }
+                // self ----------------------
+
             }
 
         } catch (error) {

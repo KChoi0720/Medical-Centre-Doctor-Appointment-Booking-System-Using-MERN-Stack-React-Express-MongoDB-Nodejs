@@ -33,8 +33,8 @@ const addDoctor = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // upload image to cloudinary
-        // const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type:'image'});
-        // const imageUrl = imageUpload.secure_url;
+        const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type:'image'});
+        const imageUrl = imageUpload.secure_url;
 
         const doctorData = {
             name,
@@ -46,7 +46,7 @@ const addDoctor = async (req, res) => {
             about,
             fees,
             address:JSON.parse(address),
-            // image:imageUrl,
+            image:imageUrl,
             date:Date.now()
         };
 
