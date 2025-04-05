@@ -5,6 +5,7 @@ import doctorModel from '../models/doctorModel.js'
 import jwt from 'jsonwebtoken'
 
 
+
 // API for adding doctor
 const addDoctor = async (req, res) => {
     try {
@@ -33,8 +34,8 @@ const addDoctor = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // upload image to cloudinary
-        // const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type:'image'});
-        // const imageUrl = imageUpload.secure_url;
+        const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type:'image'});
+        const imageUrl = imageUpload.secure_url;
 
         const doctorData = {
             name,
@@ -46,7 +47,7 @@ const addDoctor = async (req, res) => {
             about,
             fees,
             address:JSON.parse(address),
-            // image:imageUrl,
+            image:imageUrl,
             date:Date.now()
         };
 
@@ -82,9 +83,18 @@ const loginAdmin = async (req, res) => {
     }
 }
 
+// API to get all doctors list for admin panel
+const allDoctors = async (req, res) => {
+    try {
+        const doctors = await doctorModel.find({}).select('-password');
+        res.json({success:true, doctors });
+    } catch (error) {
+        console.log(error)
+        res.json({success:false, message:error.message })
+    }
+}
 
-
-export { addDoctor, loginAdmin }
+export { addDoctor, loginAdmin, allDoctors }
 
 
 
