@@ -59,11 +59,26 @@ const Appointment = () => {
 
       while (currentDate < endTime) {
         let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        // add slot to array
-        timeSlots.push({
-          datetime: new Date(currentDate),
-          time: formattedTime
-        })
+
+        let day = currentDate.getDate()
+        let month = currentDate.getMonth() + 1
+        let year = currentDate.getFullYear()
+
+        const slotDate = day + "_" + month + "_" + year
+        const slotTime = formattedTime
+
+        const isSlotAvailable = docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
+
+        if (isSlotAvailable) {
+
+          // add slot to array
+          timeSlots.push({
+            datetime: new Date(currentDate),
+            time: formattedTime
+          })
+        }
+
+
 
         // Increment current time by 30 minutes
         currentDate.setMinutes(currentDate.getMinutes() + 30)
@@ -87,7 +102,7 @@ const Appointment = () => {
       let month = date.getMonth() + 1
       let year = date.getFullYear()
 
-      const slotDate = "D" + day + "_M" + month + "_Y" + year
+      const slotDate = day + "_" + month + "_" + year
 
       // console.log(slotDate)
 
@@ -190,7 +205,7 @@ const Appointment = () => {
         </div>
         {/* <button className='bg-blue-900 text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button> */}
         {/* add click button to add appointment */}
-        <button onClick={bookAppointment} className='bg-blue-900 text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button>
+        <button onClick={bookAppointment} className='bg-blue-900 text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an appointment</button>
       </div>
 
 
