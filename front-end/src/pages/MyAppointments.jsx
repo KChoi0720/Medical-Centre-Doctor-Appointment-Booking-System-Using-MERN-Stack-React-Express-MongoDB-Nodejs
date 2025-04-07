@@ -13,13 +13,13 @@ const MyAppointments = () => {
   const { backendUrl, token, getDoctorsData } = useContext(AppContext)
 
   const [appointments, setAppointments] = useState([])
-  const months = ["", 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const months = ["",'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
   const slotDateFormat = (slotDate) => {
     const dateArray = slotDate.split('_') // change '-' to "_", then no error, must be correspond to  original format
 
     return dateArray[0] + ' ' + months[Number(dateArray[1])] + ' ' + dateArray[2]
-
+    
   }
 
 
@@ -56,11 +56,8 @@ const MyAppointments = () => {
       console.log(error);
       toast.error(error.message)
     }
-  }
+  } 
 
-
-
-  
 
 
 
@@ -94,7 +91,7 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end '>
-              {!item.cancelled && <button onClick={() => appointmentStripe(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
+              {!item.cancelled && <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
               {!item.cancelled && <button onClick={() => cancelAppointment(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-red-900 hover:text-white transition-all duration-300 cursor-pointer '>Cancel appoitment</button>}
               {item.cancelled && <p className='sm:min-w-48 text-sm py-2 border text-center border-red-800 rounded text-red-800'>Appointment Cancelled</p>}
             </div>
