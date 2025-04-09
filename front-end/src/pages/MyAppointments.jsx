@@ -3,6 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from "react-toastify"
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import { useStripe } from '@stripe/react-stripe-js'
 
 
 
@@ -60,6 +63,23 @@ const MyAppointments = () => {
 
 
 
+  const appointmentStripepay = async (appointmentId) => {
+
+    try {
+  
+      const {data} = await axios.post(backendUrl + '/api/user/payment-stripe', {appointmentId}, {headers: {token}})
+
+      if (data.success) {
+        console.log(data.order);
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+    }
+  }
+
+
 
   useEffect(() => {
     if (token) {
@@ -91,7 +111,7 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end '>
-              {!item.cancelled && <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
+              {!item.cancelled && <button onClick={() => appointmentStripepay(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
               {!item.cancelled && <button onClick={() => cancelAppointment(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-red-900 hover:text-white transition-all duration-300 cursor-pointer '>Cancel appoitment</button>}
               {item.cancelled && <p className='sm:min-w-48 text-sm py-2 border text-center border-red-800 rounded text-red-800'>Appointment Cancelled</p>}
             </div>
