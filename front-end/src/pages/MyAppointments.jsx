@@ -10,19 +10,20 @@ import { useStripe } from '@stripe/react-stripe-js'
 
 
 
+
 const MyAppointments = () => {
 
   // const { doctors } = useContext(AppContext)
   const { backendUrl, token, getDoctorsData } = useContext(AppContext)
 
   const [appointments, setAppointments] = useState([])
-  const months = ["",'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const months = ["", 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
   const slotDateFormat = (slotDate) => {
     const dateArray = slotDate.split('_') // change '-' to "_", then no error, must be correspond to  original format
 
     return dateArray[0] + ' ' + months[Number(dateArray[1])] + ' ' + dateArray[2]
-    
+
   }
 
 
@@ -59,18 +60,46 @@ const MyAppointments = () => {
       console.log(error);
       toast.error(error.message)
     }
-  } 
+  }
+
+  const initPay = ( order ) => {
+
+    const options = {
+      key: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Appointment Payment",
+      description: 'Appointment Payment',
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response) => {
+        console.log(response)
+
+      }
+    }
+
+    const str = new window.Stripe(options)
+    str.open()
+
+  }
 
 
+  // const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY)
 
+  // test stripe first
   const appointmentStripepay = async (appointmentId) => {
 
+    // testing clicking button, working well.
+    console.log("Clicked Pay Online for:", appointmentId); // Add this line
     try {
-  
-      const {data} = await axios.post(backendUrl + '/api/user/payment-stripe', {appointmentId}, {headers: {token}})
 
-      if (data.success) {
-        console.log(data.order);
+      const { data } = await axios.post(backendUrl + '/api/user/payment-stripe', { appointmentId }, { headers: { token } })
+
+      if (data.success && data.order) {
+        initPay(data.order);
+      } else {
+        toast.error("Payment order info missing!");
+        console.error("Missing order:", data);
       }
 
     } catch (error) {
