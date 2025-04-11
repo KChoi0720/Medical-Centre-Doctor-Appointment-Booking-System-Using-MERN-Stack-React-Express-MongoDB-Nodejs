@@ -6,6 +6,8 @@ import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+import Stripe from 'stripe'
+import razorpay from 'razorpay'
 
 
 // API to register user
@@ -264,8 +266,56 @@ const cancelAppointment = async (req, res) => {
 };
 
 
+const stripeInstance = new Stripe(
+  process.env.STRIPE_SECRET_KEY
+)
 
 
+// API to make payment of appointment using Stripe
+const paymentStripe = async (req, res) => {
+
+  try {
+    const { appointmentId} = req.body
+    const appointmentData = await appointmentModel.findById(appointmentId)
+  
+    if (!appointmentData || appointmentData.cancelled) {
+      return res.json({ success: false, message: "Appointment cancelled or not found" });
+    }
+  
+    const paymentIntent = await stripeInstance.paymentIntents.create({
+      amount: appointmentData.amount * 100, // Stripe uses the smallest currency unit (e.g., cents)
+      currency: process.env.CURRENCY || 'usd',
+      metadata: { appointmentId },
+    });
+
+    res.json({
+      success: true,
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+
+
+//     // creating options for stripe payment
+//     const options = {
+//       amount: appointmentData.amount * 100,
+//       currency: process.env.CURRENCY,
+//       receipt: appointmentId,
+//     }
+//     // creation of an order
+//     const order = await stripeInstance.orders.create(options)
+  
+//     res.json({ success: true, order})
+
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: error.message });
+//   }
+// }
 
 
 
@@ -277,4 +327,5 @@ export {
   bookAppointment,
   listAppointment,
   cancelAppointment,
+  paymentStripe,
 };

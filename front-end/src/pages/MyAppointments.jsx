@@ -3,6 +3,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from "react-toastify"
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import { useStripe } from '@stripe/react-stripe-js'
+
 
 
 
@@ -58,9 +62,51 @@ const MyAppointments = () => {
     }
   }
 
+  const initPay = ( order ) => {
+
+    const options = {
+      key: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Appointment Payment",
+      description: 'Appointment Payment',
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response) => {
+        console.log(response)
+
+      }
+    }
+
+    const str = new window.Stripe(options)
+    str.open()
+
+  }
 
 
-  
+  // const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY)
+
+  // test stripe first
+  const appointmentStripepay = async (appointmentId) => {
+
+    // testing clicking button, working well.
+    console.log("Clicked Pay Online for:", appointmentId); // Add this line
+    try {
+
+      const { data } = await axios.post(backendUrl + '/api/user/payment-stripe', { appointmentId }, { headers: { token } })
+
+      if (data.success && data.order) {
+        initPay(data.order);
+      } else {
+        toast.error("Payment order info missing!");
+        console.error("Missing order:", data);
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+    }
+  }
 
 
 
@@ -94,7 +140,7 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end '>
-              {!item.cancelled && <button onClick={() => appointmentStripe(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
+              {!item.cancelled && <button onClick={() => appointmentStripepay(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-blue-900 hover:text-white transition-all duration-300 cursor-pointer '>Pay Online</button>}
               {!item.cancelled && <button onClick={() => cancelAppointment(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border hover:bg-red-900 hover:text-white transition-all duration-300 cursor-pointer '>Cancel appoitment</button>}
               {item.cancelled && <p className='sm:min-w-48 text-sm py-2 border text-center border-red-800 rounded text-red-800'>Appointment Cancelled</p>}
             </div>
