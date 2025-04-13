@@ -230,6 +230,8 @@ const listAppointment = async (req, res) => {
   }
 };
 
+
+
 // API to cancel appointment
 const cancelAppointment = async (req, res) => {
   try {
@@ -266,6 +268,9 @@ const cancelAppointment = async (req, res) => {
 };
 
 
+
+
+
 const stripeInstance = new Stripe(
   process.env.STRIPE_SECRET_KEY
 )
@@ -298,24 +303,6 @@ const paymentStripe = async (req, res) => {
   }
 };
 
-
-
-//     // creating options for stripe payment
-//     const options = {
-//       amount: appointmentData.amount * 100,
-//       currency: process.env.CURRENCY,
-//       receipt: appointmentId,
-//     }
-//     // creation of an order
-//     const order = await stripeInstance.orders.create(options)
-  
-//     res.json({ success: true, order})
-
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ success: false, message: error.message });
-//   }
-// }
 
 
 
