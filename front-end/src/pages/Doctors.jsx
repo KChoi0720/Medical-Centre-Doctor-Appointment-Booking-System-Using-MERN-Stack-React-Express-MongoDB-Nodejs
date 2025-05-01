@@ -24,6 +24,7 @@ const Doctors = () => {
     }
   }
 
+  // testing here
   useEffect (() => {
     applyFilter()
   },[doctors, speciality])
